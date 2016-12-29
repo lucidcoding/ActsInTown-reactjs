@@ -27144,28 +27144,47 @@ module.exports = warning;
 },{"_process":43}],280:[function(require,module,exports){
 'use strict';
 
-var addSpotAction = function addSpotAction(text) {
-    console.log('Add spot action: ' + text);
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var nextId = 2;
 
+var addSpotAction = exports.addSpotAction = function addSpotAction(text) {
     return {
         type: 'ADD_SPOT',
-        spot: { text: text }
+        spot: {
+            id: nextId++,
+            text: text
+        }
     };
 };
-
-module.exports = addSpotAction;
 
 },{}],281:[function(require,module,exports){
 'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var ReactRouter = require('react-router');
-var Provider = require('react-redux').Provider;
+var _react = require('react');
 
-//var addSpotAction = require('./actions/AddSpot.action.js');
-var ListSpotsContainer = require('./containers/ListSpots.container.js');
-var store = require('./store/index.js');
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _reactRouter = require('react-router');
+
+var _reactRouter2 = _interopRequireDefault(_reactRouter);
+
+var _reactRedux = require('react-redux');
+
+var _ListSpotsContainer = require('./containers/ListSpots.container.js');
+
+var _ListSpotsContainer2 = _interopRequireDefault(_ListSpotsContainer);
+
+var _index = require('./store/index.js');
+
+var _index2 = _interopRequireDefault(_index);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Home = require('./components/Home.react.jsx');
 var Toggler = require('./components/Toggler.react.jsx');
@@ -27179,8 +27198,8 @@ var ListSpots = require('./components/ListSpots.react.jsx');
 
 //console.log(store.getState())
 
-var unsubscribe = store.subscribe(function () {
-    return console.log(store.getState());
+var unsubscribe = _index2.default.subscribe(function () {
+    return console.log(_index2.default.getState());
 });
 /*
 store.dispatch(addSpotAction('Adding spot'));*/
@@ -27191,26 +27210,26 @@ store.dispatch(addSpotAction('Adding spot'));*/
 /*ReactDOM.render(
     
     <Provider store={store}>
-        <ReactRouter.Router history={ ReactRouter.hashHistory }>
-            <ReactRouter.Route path="/" component={ Home }>
-            </ReactRouter.Route>
-            <ReactRouter.Route path="/Toggler" component={ Toggler }>
-            </ReactRouter.Route>
-            <ReactRouter.Route path="/SearchSpots" component={ SearchSpots }>
-            </ReactRouter.Route>
-            <ReactRouter.Route path="/SearchSpotsResults" component={ SearchSpotsResults }>
-            </ReactRouter.Route>
-            <ReactRouter.Route path="/ListSpots" component={ ListSpots }>
-            </ReactRouter.Route>
-        </ReactRouter.Router>
+        <Router history={ hashHistory }>
+            <Route path="/" component={ Home }>
+            </Route>
+            <Route path="/Toggler" component={ Toggler }>
+            </Route>
+            <Route path="/SearchSpots" component={ SearchSpots }>
+            </Route>
+            <Route path="/SearchSpotsResults" component={ SearchSpotsResults }>
+            </Route>
+            <Route path="/ListSpots" component={ ListSpots }>
+            </Route>
+        </Router>
     </Provider>,
     document.getElementById('react-application')
 );*/
 
-ReactDOM.render(React.createElement(
-    Provider,
-    { store: store },
-    React.createElement(ListSpotsContainer, null)
+_reactDom2.default.render(_react2.default.createElement(
+    _reactRedux.Provider,
+    { store: _index2.default },
+    _react2.default.createElement(_ListSpotsContainer2.default, null)
 ), document.getElementById('react-application'));
 
 },{"./components/Home.react.jsx":285,"./components/ListSpots.react.jsx":286,"./components/SearchSpots.react.jsx":287,"./components/SearchSpotsResults.react.jsx":288,"./components/Toggler.react.jsx":289,"./containers/ListSpots.container.js":291,"./store/index.js":294,"react":257,"react-dom":46,"react-redux":183,"react-router":225}],282:[function(require,module,exports){
@@ -27530,21 +27549,29 @@ module.exports = Home;
 },{"./Header.react.jsx":284,"react":257,"react-dom":46}],286:[function(require,module,exports){
 'use strict';
 
-var React = require('react');
-var PropTypes = require('react').PropTypes;
-var ReactDOM = require('react-dom');
-var ReactRouter = require('react-router');
-var Header = require('./Header.react.jsx');
+var _react = require('react');
 
-var addSpotAction = require('../actions/AddSpot.action.js');
-var store = require('../store/index.js');
+var _react2 = _interopRequireDefault(_react);
 
-var ListSpots = React.createClass({
-    displayName: 'ListSpots',
+var _HeaderReact = require('./Header.react.jsx');
+
+var _HeaderReact2 = _interopRequireDefault(_HeaderReact);
+
+var _AddSpotAction = require('../actions/AddSpot.action.js');
+
+var _index = require('../store/index.js');
+
+var _index2 = _interopRequireDefault(_index);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ListSpotsComponent = _react2.default.createClass({
+    displayName: 'ListSpotsComponent',
 
     propTypes: {
-        spots: PropTypes.arrayOf(PropTypes.shape({
-            text: PropTypes.string.isRequired
+        spots: _react.PropTypes.arrayOf(_react.PropTypes.shape({
+            id: _react.PropTypes.number.isRequired,
+            text: _react.PropTypes.string.isRequired
         }).isRequired).isRequired
     },
     /*getInitialState: function() {
@@ -27566,32 +27593,23 @@ var ListSpots = React.createClass({
         this.loadSpots();
     }, */
     componentDidMount: function componentDidMount() {
-        store.dispatch(addSpotAction('Adding spot'));
+        _index2.default.dispatch((0, _AddSpotAction.addSpotAction)('Adding spot'));
     },
     render: function render() {
-        //var spots = this.stae.spots;
-        //var spots = this.props.spots;
-
-        /*var spotRows = spots.map(function(spot) {
-            return (
-                <div className="spotRow" key={spot.id}>Time: {spot.scheduledFor}, User: {spot.user.username}, Town: {spot.town.name}</div>
-            );
-        });*/
-
         var spotRows = this.props.spots.map(function (spot) {
-            return React.createElement(
+            return _react2.default.createElement(
                 'div',
-                { className: 'spotRow', key: spot.text },
+                { className: 'spotRow', key: spot.id },
                 spot.text
             );
         });
 
-        return React.createElement(
+        return _react2.default.createElement(
             'div',
             { className: 'listSpotsComponent' },
-            React.createElement(Header, null),
+            _react2.default.createElement(_HeaderReact2.default, null),
             spotRows,
-            React.createElement(
+            _react2.default.createElement(
                 'button',
                 { onClick: this.props.add },
                 'Add'
@@ -27600,7 +27618,7 @@ var ListSpots = React.createClass({
     }
 });
 
-module.exports = ListSpots;
+module.exports = ListSpotsComponent;
 
 /*
     http://redux.js.org/docs/basics/ExampleTodoList.html
@@ -27608,7 +27626,7 @@ module.exports = ListSpots;
     https://css-tricks.com/learning-react-redux/
     */
 
-},{"../actions/AddSpot.action.js":280,"../store/index.js":294,"./Header.react.jsx":284,"react":257,"react-dom":46,"react-router":225}],287:[function(require,module,exports){
+},{"../actions/AddSpot.action.js":280,"../store/index.js":294,"./Header.react.jsx":284,"react":257}],287:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -27800,9 +27818,19 @@ module.exports = TownSelect;
 },{"react":257,"react-dom":46}],291:[function(require,module,exports){
 'use strict';
 
-var connect = require("react-redux").connect;
-var addSpotAction = require('../actions/AddSpot.action.js');
-var ListSpotsComponent = require('../components/ListSpots.react.jsx');
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _reactRedux = require('react-redux');
+
+var _AddSpotAction = require('../actions/AddSpot.action.js');
+
+var _ListSpotsReact = require('../components/ListSpots.react.jsx');
+
+var _ListSpotsReact2 = _interopRequireDefault(_ListSpotsReact);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(store) {
     return {
@@ -27813,73 +27841,88 @@ var mapStateToProps = function mapStateToProps(store) {
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
         add: function add() {
-            dispatch(addSpotAction('Adding spot'));
+            dispatch((0, _AddSpotAction.addSpotAction)('Adding spot'));
         }
     };
 };
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(ListSpotsComponent);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_ListSpotsReact2.default);
 
 },{"../actions/AddSpot.action.js":280,"../components/ListSpots.react.jsx":286,"react-redux":183}],292:[function(require,module,exports){
 'use strict';
 
-var addSpotReducer = function addSpotReducer(state, action) {
-    if (typeof state === 'undefined') {
-        state = {
-            spots: [{ text: 'spot 1' }, { text: 'spot 2' }] };
-    }
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+var initialState = {
+    spots: [{
+        id: 0,
+        text: 'spot 1'
+    }, {
+        id: 1,
+        text: 'spot 2'
+    }]
+};
+
+var addSpotReducer = function addSpotReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+    var action = arguments[1];
 
     if (action.type === 'ADD_SPOT') {
-        //var newState = state.spots.push(action.spot);
-        //return state;
-        //var newState = Object.assign({}, state);
-        //newState.spots.push(action.spot );
-        //var newState = { spots: [ action.spot ]};
-        var newState = { spots: state.spots.concat([action.spot]) };
+        var newState = {
+            //spots: state.spots.concat([action.spot])
+            spots: [].concat(_toConsumableArray(state.spots), [action.spot])
+        };
+
         return newState;
     }
 
     return state;
-
-    /*state = state || {};
-    
-    console.log('Add spot reducer: ' + spot.text);
-    
-    switch (spot.type) {
-        case 'ADD_SPOT':
-            return {
-                text: spot.text,
-                completed: false
-            }
-        case 'DELETE_SPOT':
-            console.log('do nothing');
-        default:
-            return state
-    }*/
 };
 
-module.exports = addSpotReducer;
+exports.default = addSpotReducer;
 
 },{}],293:[function(require,module,exports){
 'use strict';
 
-var combineReducers = require('redux').combineReducers;
-var addSpotReducer = require('./AddSpot.reducer.js');
-
-var Reducers = combineReducers({
-    addSpot: addSpotReducer
+Object.defineProperty(exports, "__esModule", {
+    value: true
 });
 
-module.exports = Reducers;
+var _redux = require('redux');
+
+var _AddSpotReducer = require('./AddSpot.reducer.js');
+
+var _AddSpotReducer2 = _interopRequireDefault(_AddSpotReducer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var reducers = (0, _redux.combineReducers)({
+    addSpot: _AddSpotReducer2.default
+});
+
+exports.default = reducers;
 
 },{"./AddSpot.reducer.js":292,"redux":263}],294:[function(require,module,exports){
 'use strict';
 
-var createStore = require('redux').createStore;
-var Reducer = require('../reducers/index.js');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-var store = createStore(Reducer);
+var _redux = require('redux');
 
-module.exports = store;
+var _index = require('../reducers/index.js');
+
+var _index2 = _interopRequireDefault(_index);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var store = (0, _redux.createStore)(_index2.default);
+
+exports.default = store;
 
 },{"../reducers/index.js":293,"redux":263}]},{},[281]);

@@ -1,15 +1,12 @@
-var React = require('react');
-var PropTypes = require('react').PropTypes;
-var ReactDOM = require('react-dom');
-var ReactRouter = require('react-router');
-var Header = require('./Header.react.jsx');
+import React, { PropTypes } from 'react';
+import Header from './Header.react.jsx';
+import { addSpotAction } from '../actions/AddSpot.action.js';
+import store from '../store/index.js';
 
-var addSpotAction = require('../actions/AddSpot.action.js');
-var store = require('../store/index.js');
-
-var ListSpots = React.createClass({
+var ListSpotsComponent = React.createClass({
     propTypes: {
         spots: PropTypes.arrayOf(PropTypes.shape({
+            id: PropTypes.number.isRequired,
             text: PropTypes.string.isRequired
         }).isRequired).isRequired
     },
@@ -36,18 +33,9 @@ var ListSpots = React.createClass({
         store.dispatch(addSpotAction('Adding spot'));
     },
     render: function () {
-        //var spots = this.stae.spots;
-        //var spots = this.props.spots;
-        
-        /*var spotRows = spots.map(function(spot) {
-            return (
-                <div className="spotRow" key={spot.id}>Time: {spot.scheduledFor}, User: {spot.user.username}, Town: {spot.town.name}</div>
-            );
-        });*/
-        
         var spotRows = this.props.spots.map(function(spot) {
             return (
-                <div className="spotRow" key={spot.text}>{spot.text}</div>
+                <div className="spotRow" key={spot.id}>{spot.text}</div>
             );
         });
         
@@ -61,7 +49,7 @@ var ListSpots = React.createClass({
     }
 });
 
-module.exports = ListSpots;
+module.exports = ListSpotsComponent;
 
 /*
     http://redux.js.org/docs/basics/ExampleTodoList.html

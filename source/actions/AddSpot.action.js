@@ -1,10 +1,11 @@
-var addSpotAction = function(text) {
-    console.log('Add spot action: ' + text);
-    
+let nextId = 2;
+
+export const addSpotAction = function(text) {
     return {
         type: 'ADD_SPOT',
-        spot: { text: text }
-    }
+        spot: { 
+            id: nextId++,
+            text: text 
+        }
+    };
 }
-
-module.exports = addSpotAction;

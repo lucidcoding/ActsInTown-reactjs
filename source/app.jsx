@@ -1,11 +1,9 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-var ReactRouter = require('react-router'); 
-var Provider = require('react-redux').Provider;
-
-//var addSpotAction = require('./actions/AddSpot.action.js');
-var ListSpotsContainer = require('./containers/ListSpots.container.js');
-var store = require('./store/index.js');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ReactRouter, { hashHistory, Route, Router} from 'react-router'; 
+import { Provider } from 'react-redux';
+import ListSpotsContainer from './containers/ListSpots.container.js';
+import store from './store/index.js';
 
 var Home = require('./components/Home.react.jsx');
 var Toggler = require('./components/Toggler.react.jsx');
@@ -31,18 +29,18 @@ store.dispatch(addSpotAction('Adding spot'));*/
 /*ReactDOM.render(
     
     <Provider store={store}>
-        <ReactRouter.Router history={ ReactRouter.hashHistory }>
-            <ReactRouter.Route path="/" component={ Home }>
-            </ReactRouter.Route>
-            <ReactRouter.Route path="/Toggler" component={ Toggler }>
-            </ReactRouter.Route>
-            <ReactRouter.Route path="/SearchSpots" component={ SearchSpots }>
-            </ReactRouter.Route>
-            <ReactRouter.Route path="/SearchSpotsResults" component={ SearchSpotsResults }>
-            </ReactRouter.Route>
-            <ReactRouter.Route path="/ListSpots" component={ ListSpots }>
-            </ReactRouter.Route>
-        </ReactRouter.Router>
+        <Router history={ hashHistory }>
+            <Route path="/" component={ Home }>
+            </Route>
+            <Route path="/Toggler" component={ Toggler }>
+            </Route>
+            <Route path="/SearchSpots" component={ SearchSpots }>
+            </Route>
+            <Route path="/SearchSpotsResults" component={ SearchSpotsResults }>
+            </Route>
+            <Route path="/ListSpots" component={ ListSpots }>
+            </Route>
+        </Router>
     </Provider>,
     document.getElementById('react-application')
 );*/

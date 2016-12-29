@@ -1,8 +1,8 @@
-var combineReducers = require('redux').combineReducers;
-var addSpotReducer = require('./AddSpot.reducer.js');
+import { combineReducers } from 'redux';
+import addSpotReducer from './AddSpot.reducer.js';
 
-var Reducers = combineReducers({
+const reducers = combineReducers({
     addSpot: addSpotReducer
 });
 
-module.exports = Reducers;
+export default reducers;

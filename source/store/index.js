@@ -1,6 +1,6 @@
-var createStore = require('redux').createStore;
-var Reducer = require('../reducers/index.js');
+import { createStore } from 'redux';
+import Reducer from '../reducers/index.js';
 
-var store = createStore(Reducer);
+const store = createStore(Reducer);
 
-module.exports = store;
+export default store;
