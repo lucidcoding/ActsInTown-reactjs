@@ -12,8 +12,8 @@ var addSpotReducer = function (state, action) {
         //return state;
         //var newState = Object.assign({}, state);
         //newState.spots.push(action.spot );
-        var newState = { spots: [ action.spot ]};
-        //var newState = state.spots.concat([action.spot]);
+        //var newState = { spots: [ action.spot ]};
+        var newState = { spots: state.spots.concat([action.spot])};
         return newState;
     }
     
