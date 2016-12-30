@@ -4,7 +4,7 @@ var babelify = require('babelify');
 var source = require('vinyl-source-stream');
 
 gulp.task('default', function() {
-    return browserify('./source/app.jsx')
+    return browserify('./source/index.jsx')
         .transform(babelify)
         .bundle()
         .pipe(source('actsintown-reactjs.js'))
