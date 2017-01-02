@@ -28917,6 +28917,7 @@ var _axios2 = _interopRequireDefault(_axios);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//Action types
 var GET_SPOTS_SUCCESS = exports.GET_SPOTS_SUCCESS = 'GET_SPOTS_SUCCESS';
 var GET_SPOTS_ERROR = exports.GET_SPOTS_ERROR = 'GET_SPOTS_ERROR';
 var GET_SPOTS = exports.GET_SPOTS = 'GET_SPOTS';
@@ -29748,6 +29749,8 @@ var _TownSelectReact = require('./TownSelect.react.jsx');
 
 var _TownSelectReact2 = _interopRequireDefault(_TownSelectReact);
 
+var _spotReducer = require('../reducers/spot.reducer.js');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var AddSpotComponent = _react2.default.createClass({
@@ -29756,12 +29759,20 @@ var AddSpotComponent = _react2.default.createClass({
     countyChanged: function countyChanged(countyId) {
         this._townSelect.loadTowns(countyId);
     },
+    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+        if (nextProps.status) {
+            console.log('newProps: ' + nextProps.status);
+
+            if (nextProps.status === _spotReducer.SPOTS_STATUS.ADD_SUCCESS) {
+                _reactRouter.hashHistory.push('/ListSpots');
+            }
+            //this.context.router.push('/ListSpots');
+        }
+    },
+
     handleSubmit: function handleSubmit(e) {
-        e.preventDefault();
-        var date = this._dateSelect.getValue();
-        var countyId = this._countySelect.getValue();
-        var townId = this._townSelect.getValue();
-        _reactRouter2.default.hashHistory.push('/SearchSpotsResults?countyId=' + countyId);
+        this.props.add();
+        //ReactRouter.hashHistory.push('/ListSpots' + countyId);
         console.log();
     },
     render: function render() {
@@ -29787,7 +29798,7 @@ var AddSpotComponent = _react2.default.createClass({
 
 module.exports = AddSpotComponent;
 
-},{"./CountySelect.react.jsx":313,"./DateTimeSelect.component.jsx":315,"./Header.react.jsx":316,"./TownSelect.react.jsx":321,"react":287,"react-router":255}],323:[function(require,module,exports){
+},{"../reducers/spot.reducer.js":329,"./CountySelect.react.jsx":313,"./DateTimeSelect.component.jsx":315,"./Header.react.jsx":316,"./TownSelect.react.jsx":321,"react":287,"react-router":255}],323:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -29893,7 +29904,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var mapStateToProps = function mapStateToProps(store) {
     return {
-        spots: store.addSpot.spots
+        spots: store.spots.spots
     };
 };
 
@@ -29941,14 +29952,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var mapStateToProps = function mapStateToProps(store) {
     return {
-        spots: store.addSpot.spots
+        status: store.spots.status
     };
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
         add: function add() {
-            dispatch((0, _spotsAction.addSpot)('Adding spot'));
+            dispatch((0, _spotsAction.addSpot)({
+                townId: '1c6a404e-8ff3-11e6-8dd0-089e01bdf73e',
+                sheduledFor: '2017-02-10 10:00:00'
+            }));
         }
     };
 };
@@ -29978,7 +29992,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var mapStateToProps = function mapStateToProps(store) {
     return {
-        spots: store.addSpot.spots
+        spots: store.spots.spots
     };
 };
 
@@ -30127,7 +30141,7 @@ var _spotReducer2 = _interopRequireDefault(_spotReducer);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var reducers = (0, _redux.combineReducers)({
-    addSpot: _spotReducer2.default,
+    spots: _spotReducer2.default,
     routing: _reactRouterRedux.routerReducer
 });
 
@@ -30139,14 +30153,25 @@ exports.default = reducers;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.SPOTS_STATUS = undefined;
 
 var _redux = require('redux');
 
 var _spotsAction = require('../actions/spots.action.js');
 
+//Status of state:
+var SPOTS_STATUS = exports.SPOTS_STATUS = {
+    INITIAL: 0,
+    GETTING: 1,
+    GET_SUCCESS: 2,
+    GET_ERROR: 3,
+    ADDING: 4,
+    ADD_SUCCESS: 5,
+    ADD_ERROR: 6
+};
+
 var initialState = {
-    isGetting: false,
-    isAdding: false,
+    status: SPOTS_STATUS.INITIAL,
     spots: []
 };
 
@@ -30157,11 +30182,11 @@ function spotReducer() {
     switch (action.type) {
         case _spotsAction.GET_SPOTS:
             return Object.assign({}, state, {
-                isGetting: true
+                status: SPOTS_STATUS.GETTING
             });
         case _spotsAction.GET_SPOTS_SUCCESS:
             return Object.assign({}, state, {
-                isGetting: false,
+                status: SPOTS_STATUS.GET_SUCCESS,
                 spots: action.spots.map(function (spot) {
                     return {
                         id: spot.id,
@@ -30171,31 +30196,24 @@ function spotReducer() {
             });
         case _spotsAction.GET_SPOTS_ERROR:
             return Object.assign({}, state, {
-                isGetting: false,
+                status: SPOTS_STATUS.GET_ERROR,
                 error: action.error
             });
         case _spotsAction.ADD_SPOT_REQUEST:
             return Object.assign({}, state, {
-                isAdding: true
+                status: SPOTS_STATUS.ADDING
             });
         case _spotsAction.ADD_SPOT_SUCCESS:
             return Object.assign({}, state, {
-                isAdding: false
+                status: SPOTS_STATUS.ADD_SUCCESS
             });
         case _spotsAction.ADD_SPOT_ERROR:
             return Object.assign({}, state, {
-                isAdding: false
+                status: SPOTS_STATUS.ADD_ERROR
             });
         default:
             return state;
     }
-    /*if (action.type === ADD_SPOT) {
-        var newState = {
-            //spots: state.spots.concat([action.spot])
-            spots: [ ...state.spots, action.spot]
-        };
-          return newState;
-    }*/
 
     return state;
 }

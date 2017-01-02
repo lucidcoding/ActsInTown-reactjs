@@ -3,7 +3,7 @@ import { routerReducer } from 'react-router-redux'
 import spotReducer from './spot.reducer.js';
 
 const reducers = combineReducers({
-    addSpot: spotReducer,
+    spots: spotReducer,
     routing: routerReducer
 });
 

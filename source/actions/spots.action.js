@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+//Action types
 export const GET_SPOTS_SUCCESS = 'GET_SPOTS_SUCCESS';
 export const GET_SPOTS_ERROR = 'GET_SPOTS_ERROR';
 export const GET_SPOTS = 'GET_SPOTS';

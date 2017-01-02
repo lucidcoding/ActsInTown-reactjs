@@ -5,7 +5,7 @@ import ListSpotsComponent from '../components/listSpots.component.jsx';
 
 const mapStateToProps = function(store){
     return {
-        spots: store.addSpot.spots
+        spots: store.spots.spots
     };
 };
 
