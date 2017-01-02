@@ -1,13 +1,16 @@
 import React, { PropTypes } from 'react';
 import Header from './Header.react.jsx';
-import { addSpotAction } from '../actions/AddSpot.action.js';
+//import { addSpot, getSpots, getSpotsError, getSpotsSuccess } from '../actions/spots.action.js';
+
+
 import store from '../store/index.js';
 
 var ListSpotsComponent = React.createClass({
     propTypes: {
         spots: PropTypes.arrayOf(PropTypes.shape({
-            id: PropTypes.number.isRequired,
-            text: PropTypes.string.isRequired
+            id: PropTypes.string.isRequired,
+            scheduledFor: PropTypes.instanceOf(Date).isRequired
+            //user: PropTypes.string.isRequired
         }).isRequired).isRequired
     },
     /*getInitialState: function() {
@@ -29,13 +32,13 @@ var ListSpotsComponent = React.createClass({
     componentWillMount: function() {
         this.loadSpots();
     }, */
-    componentDidMount: function() {
-        store.dispatch(addSpotAction('Adding spot'));
+    componentWillMount: function() {
+        this.props.getSpots();   
     },
     render: function () {
         var spotRows = this.props.spots.map(function(spot) {
             return (
-                <div className="spotRow" key={spot.id}>{spot.text}</div>
+                <div className="spotRow" key={spot.id}>{spot.id}, {spot.scheduledFor.toString()}</div>
             );
         });
         

@@ -11,6 +11,7 @@ var Header = React.createClass({
           <li><ReactRouter.Link to={`/`}>Home</ReactRouter.Link></li>
           <li><ReactRouter.Link to={`/Toggler`}>Toggler</ReactRouter.Link></li>
           <li><ReactRouter.Link to={`/SearchSpots`}>Search</ReactRouter.Link></li>
+          <li><ReactRouter.Link to={`/AddSpot`}>Add Spot</ReactRouter.Link></li>
           <li><ReactRouter.Link to={`/ListSpots`}>My Spots</ReactRouter.Link></li>
         </ul>
         <div className="content">

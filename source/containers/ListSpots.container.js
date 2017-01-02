@@ -1,6 +1,7 @@
+import axios from 'axios';
 import { connect } from 'react-redux';
-import { addSpotAction } from '../actions/AddSpot.action.js';
-import ListSpotsComponent from '../components/ListSpots.react.jsx';
+import { addSpot, getSpots, getSpotsError, getSpotsSuccess } from '../actions/spots.action.js';
+import ListSpotsComponent from '../components/listSpots.component.jsx';
 
 const mapStateToProps = function(store){
     return {
@@ -10,7 +11,21 @@ const mapStateToProps = function(store){
 
 const mapDispatchToProps = function(dispatch){
     return {
-        add: function(){ dispatch(addSpotAction('Adding spot')); }
+        getSpots: function() {
+            dispatch(getSpots());
+         
+            /*axios.get('https://localhost:8443/ActsInTown-api/spot/for-test-user')
+                .then(function (response) {
+                    dispatch(getSpotsSuccess(response));
+                })
+                .catch(function (error){
+                    console.log('Error getting spots: ' + error);
+                    dispatch(getSpotsError(error));
+                });*/
+        },
+        add: function() { 
+            dispatch(addSpot('Adding spot')); 
+        }
     };
 };
 

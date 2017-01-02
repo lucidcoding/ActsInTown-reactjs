@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactRouter, { browserHistory, hashHistory, IndexRoute, Route, Router} from 'react-router'; 
 import { Provider } from 'react-redux';
-import ListSpotsContainer from './containers/ListSpots.container.js';
+import AddSpotContainer from './containers/addSpot.container.js';
+import ListSpotsContainer from './containers/listSpots.container.js';
 import store from './store/index.js';
 import { syncHistoryWithStore } from 'react-router-redux'
 
@@ -12,7 +13,8 @@ var Home = require('./components/Home.react.jsx');
 var Toggler = require('./components/Toggler.react.jsx');
 var SearchSpots = require('./components/SearchSpots.react.jsx');
 var SearchSpotsResults = require('./components/SearchSpotsResults.react.jsx');
-var ListSpots = require('./components/ListSpots.react.jsx');
+
+
 //ReactDOM.render(<Application />, document.getElementById('react-application'));
 
 
@@ -45,6 +47,8 @@ ReactDOM.render(
             <Route path="/SearchSpots" component={ SearchSpots }>
             </Route>
             <Route path="/SearchSpotsResults" component={ SearchSpotsResults }>
+            </Route>
+            <Route path="/AddSpot" component={ AddSpotContainer }>
             </Route>
             <Route path="/ListSpots" component={ ListSpotsContainer }>
             </Route>
