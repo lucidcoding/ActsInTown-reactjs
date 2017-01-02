@@ -28907,10 +28907,8 @@ module.exports = warning;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.ADD_SPOT = exports.GET_SPOTS = exports.GET_SPOTS_ERROR = exports.GET_SPOTS_SUCCESS = undefined;
+exports.ADD_SPOT_ERROR = exports.ADD_SPOT_SUCCESS = exports.ADD_SPOT_REQUEST = exports.GET_SPOTS = exports.GET_SPOTS_ERROR = exports.GET_SPOTS_SUCCESS = undefined;
 exports.addSpot = addSpot;
-exports.getSpotsSuccess = getSpotsSuccess;
-exports.getSpotsError = getSpotsError;
 exports.getSpots = getSpots;
 
 var _axios = require('axios');
@@ -28919,20 +28917,48 @@ var _axios2 = _interopRequireDefault(_axios);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var nextId = 2;
-
 var GET_SPOTS_SUCCESS = exports.GET_SPOTS_SUCCESS = 'GET_SPOTS_SUCCESS';
 var GET_SPOTS_ERROR = exports.GET_SPOTS_ERROR = 'GET_SPOTS_ERROR';
 var GET_SPOTS = exports.GET_SPOTS = 'GET_SPOTS';
-var ADD_SPOT = exports.ADD_SPOT = 'ADD_SPOT';
+var ADD_SPOT_REQUEST = exports.ADD_SPOT_REQUEST = 'ADD_SPOT_REQUEST';
+var ADD_SPOT_SUCCESS = exports.ADD_SPOT_SUCCESS = 'ADD_SPOT_SUCCESS';
+var ADD_SPOT_ERROR = exports.ADD_SPOT_ERROR = 'ADD_SPOT_ERROR';
 
-function addSpot(text) {
+function addSpotRequest(data) {
     return {
-        type: ADD_SPOT,
-        spot: {
-            id: nextId++,
-            text: text
-        }
+        type: ADD_SPOT_REQUEST
+    };
+}
+
+function addSpotSuccess(response) {
+    return {
+        type: ADD_SPOT_SUCCESS
+    };
+}
+
+function addSpotError(error) {
+    return {
+        type: ADD_SPOT_ERROR,
+        error: error
+    };
+}
+
+function addSpot(data) {
+    return function (dispatch) {
+        dispatch(addSpotRequest(data));
+
+        return _axios2.default.post('https://localhost:8443/ActsInTown-api/spot/for-test-user', data).then(function (response) {
+            dispatch(addSpotSuccess(response));
+        }).catch(function (error) {
+            console.log('Error getting spots: ' + error);
+            dispatch(addSpotError(error));
+        });
+    };
+}
+
+function getSpotsRequest() {
+    return {
+        type: GET_SPOTS
     };
 }
 
@@ -28954,11 +28980,7 @@ function getSpotsError(error) {
 
 function getSpots() {
     return function (dispatch) {
-        var action = {
-            type: GET_SPOTS
-        };
-
-        dispatch(action);
+        dispatch(getSpotsRequest());
 
         return _axios2.default.get('https://localhost:8443/ActsInTown-api/spot/for-test-user').then(function (response) {
             dispatch(getSpotsSuccess(response));
@@ -28967,9 +28989,6 @@ function getSpots() {
             dispatch(getSpotsError(error));
         });
     };
-    /*return {
-        type: GET_SPOTS
-    };*/
 }
 
 },{"axios":1}],312:[function(require,module,exports){
@@ -29893,7 +29912,10 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
                 });*/
         },
         add: function add() {
-            dispatch((0, _spotsAction.addSpot)('Adding spot'));
+            dispatch((0, _spotsAction.addSpot)({
+                townId: '1c6a404e-8ff3-11e6-8dd0-089e01bdf73e',
+                sheduledFor: '2017-02-10 10:00:00'
+            }));
         }
     };
 };
@@ -29975,7 +29997,10 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
                 });*/
         },
         add: function add() {
-            dispatch((0, _spotsAction.addSpot)('Adding spot'));
+            dispatch((0, _spotsAction.addSpot)({
+                townId: '1c6a404e-8ff3-11e6-8dd0-089e01bdf73e',
+                sheduledFor: '2017-02-10 10:00:00'
+            }));
         }
     };
 };
@@ -30121,6 +30146,7 @@ var _spotsAction = require('../actions/spots.action.js');
 
 var initialState = {
     isGetting: false,
+    isAdding: false,
     spots: []
 };
 
@@ -30142,6 +30168,23 @@ function spotReducer() {
                         scheduledFor: new Date(spot.scheduledFor)
                     };
                 })
+            });
+        case _spotsAction.GET_SPOTS_ERROR:
+            return Object.assign({}, state, {
+                isGetting: false,
+                error: action.error
+            });
+        case _spotsAction.ADD_SPOT_REQUEST:
+            return Object.assign({}, state, {
+                isAdding: true
+            });
+        case _spotsAction.ADD_SPOT_SUCCESS:
+            return Object.assign({}, state, {
+                isAdding: false
+            });
+        case _spotsAction.ADD_SPOT_ERROR:
+            return Object.assign({}, state, {
+                isAdding: false
             });
         default:
             return state;
